@@ -1,5 +1,15 @@
 cmake_minimum_required(VERSION 2.8.3)
+
+include(cmake/HunterGate.cmake)
+HunterGate(
+  URL "https://github.com/ruslo/hunter/archive/v0.21.2.tar.gz"
+  SHA1 "a0fa4d9d12a7e59ea118798fedeaad59c2893b04"
+)
+
 project(std_msgs)
+
+hunter_add_package(catkin)
+hunter_add_package(ros_message_generation)
 
 find_package(catkin REQUIRED COMPONENTS message_generation)
 
@@ -42,9 +52,26 @@ add_message_files(
 
 generate_messages()
 
+set(PROJECT_INSTALLSPACE_LIBRARIES ros::${PROJECT_NAME})
 catkin_package(
+  LIBRARIES std_msgs
   INCLUDE_DIRS include
   CATKIN_DEPENDS message_runtime)
+
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE $<INSTALL_INTERFACE:include>)
+
+install(TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}Targets
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
+
+install(EXPORT ${PROJECT_NAME}Targets
+    DESTINATION share/${PROJECT_NAME}/cmake
+    NAMESPACE ros::
+    FILE ${PROJECT_NAME}Targets.cmake
+)
 
 install(DIRECTORY include/std_msgs/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
