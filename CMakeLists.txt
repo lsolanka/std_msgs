@@ -10,6 +10,7 @@ project(std_msgs)
 
 hunter_add_package(ros-catkin)
 hunter_add_package(ros-message_generation)
+hunter_add_package(ros-message_runtime)
 
 find_package(catkin REQUIRED COMPONENTS message_generation)
 
