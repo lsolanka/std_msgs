@@ -2,16 +2,14 @@ cmake_minimum_required(VERSION 2.8.3)
 
 include(cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/lsolanka/hunter/archive/4ecf66e071495981031fdfa99aad576405537266.tar.gz"
-    SHA1 "727648f578f3cbcb6ea0e644bd8b0111e56688bc"
-    LOCAL
+    URL "https://github.com/lsolanka/hunter/archive/v0.19.210-5.tar.gz"
+    SHA1 "074963ca58f3083440d4081efc38f50347dfce5e"
 )
 
 project(std_msgs)
 
-hunter_add_package(catkin)
-hunter_add_package(message_generation)
-hunter_add_package(roscpp_core) # Should probably be removed in the final version
+hunter_add_package(ros-catkin)
+hunter_add_package(ros-message_generation)
 
 find_package(catkin REQUIRED COMPONENTS message_generation)
 
@@ -54,8 +52,9 @@ add_message_files(
 
 generate_messages()
 
+set(PROJECT_INSTALLSPACE_LIBRARIES ros::${PROJECT_NAME})
 catkin_package(
-  LIBRARIES ros::std_msgs
+  LIBRARIES std_msgs
   INCLUDE_DIRS include
   CATKIN_DEPENDS message_runtime)
 
